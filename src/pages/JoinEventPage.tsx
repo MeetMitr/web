@@ -1,8 +1,9 @@
-import { Box, TextField, Button, Grid, Card, CardContent } from "@mui/material";
+import { Box, TextField, Button, Grid, Card } from "@mui/material";
 import Logo from "../resources/logo.svg";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 
 const MySearch = styled(TextField)`
   background-color: white;
@@ -64,6 +65,19 @@ const EventPaper: React.FC<EventPaperProps> = (props) => {
 };
 
 const JoinEventPage: React.FC = () => {
+  const [search, setSearch] = useState("");
+
+  let mock = [
+    "Poom's Party",
+    "แบกพระเกี้ยว",
+    "ม็อบสนับสนุน 112",
+    "ทำความดีถวายพ่อหลวง",
+  ];
+
+  for (let i = 0; i < 4; i++) {
+    mock.push("Test Name " + i);
+  }
+
   return (
     <Box minHeight="100vh" style={{ backgroundColor: "#FAF3E7" }}>
       <Box
@@ -101,6 +115,7 @@ const JoinEventPage: React.FC = () => {
             label="Search"
             size="small"
             style={{ width: "90%" }}
+            onChange={(e) => setSearch(e.target.value)}
           ></MySearch>
           <Button
             variant="contained"
@@ -113,16 +128,20 @@ const JoinEventPage: React.FC = () => {
       </Box>
       <Box width="90%" marginLeft="5%">
         <Grid container spacing={2}>
-          {Array.from(Array(10).keys()).map((x) => {
-            return (
-              <Grid item xs={3}>
-                <EventPaper
-                  name={"Test Name " + x}
-                  time={Date()}
-                  location="Pathumwan 99"
-                />
-              </Grid>
-            );
+          {mock.map((name) => {
+            if (name.slice(0, search.length) === search) {
+              return (
+                <Grid item xs={3}>
+                  <EventPaper
+                    name={name}
+                    time={Date()}
+                    location="Pathumwan 99"
+                  />
+                </Grid>
+              );
+            } else {
+              return <></>;
+            }
           })}
         </Grid>
       </Box>
