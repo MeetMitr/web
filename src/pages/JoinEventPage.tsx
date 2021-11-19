@@ -1,9 +1,20 @@
-import { Box, TextField, Button, Grid, Card } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  Modal,
+  Slider,
+} from "@mui/material";
+import DateRangePicker, { DateRange } from "@mui/lab/DateRangePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Logo from "../resources/logo.svg";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { styled } from "@mui/material/styles";
-import { useEffect, useState } from "react";
+import { useState, Fragment } from "react";
 
 const MySearch = styled(TextField)`
   background-color: white;
@@ -15,12 +26,96 @@ const MySearch = styled(TextField)`
   }
 `;
 
+const MySlider = styled(Slider)`
+  color: #ffcc4d;
+`;
+
 interface EventPaperProps {
   imageUrl?: string;
   name: string;
   time: string;
   location: string;
 }
+
+interface FilterModalProps {
+  open: boolean;
+  setShowFilterModal: any;
+}
+
+const FilterModal: React.FC<FilterModalProps> = (props) => {
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    backgroundColor: "#FAF3E7",
+    borderRadius: "10px",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+  const [value, setValue] = useState<DateRange<Date>>([null, null]);
+  return (
+    <Modal open={props.open}>
+      <Box sx={style}>
+        <Box>วันที่</Box>
+        <Box marginY={2}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DateRangePicker
+              startText="Check-in"
+              endText="Check-out"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
+              }}
+              renderInput={(startProps, endProps) => (
+                <Fragment>
+                  <TextField {...startProps} />
+                  <Box sx={{ mx: 2 }}> to </Box>
+                  <TextField {...endProps} />
+                </Fragment>
+              )}
+            />
+          </LocalizationProvider>
+        </Box>
+        <hr />
+        <Box>ระยะทาง</Box>
+        <MySlider
+          defaultValue={50}
+          aria-label="Default"
+          valueLabelDisplay="auto"
+        />
+        <Box display="flex" justifyContent="space-between">
+          <Box>0 KM</Box>
+          <Box>100 KM</Box>
+        </Box>
+        <hr />
+        <Box
+          marginLeft="55%"
+          display="flex"
+          width="45%"
+          justifyContent="space-between"
+        >
+          <Button
+            variant="contained"
+            onClick={() => props.setShowFilterModal(false)}
+            style={{ backgroundColor: "#B54040" }}
+          >
+            Close
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => props.setShowFilterModal(false)}
+            style={{ backgroundColor: "#356843" }}
+          >
+            Apply
+          </Button>
+        </Box>
+      </Box>
+    </Modal>
+  );
+};
 
 const EventPaper: React.FC<EventPaperProps> = (props) => {
   console.log(props);
@@ -66,7 +161,7 @@ const EventPaper: React.FC<EventPaperProps> = (props) => {
 
 const JoinEventPage: React.FC = () => {
   const [search, setSearch] = useState("");
-
+  const [showFilterModal, setShowFilterModal] = useState(false);
   let mock = [
     "Poom's Party",
     "แบกพระเกี้ยว",
@@ -80,6 +175,10 @@ const JoinEventPage: React.FC = () => {
 
   return (
     <Box minHeight="100vh" style={{ backgroundColor: "#FAF3E7" }}>
+      <FilterModal
+        open={showFilterModal}
+        setShowFilterModal={setShowFilterModal}
+      />
       <Box
         display="flex"
         paddingY="10px"
@@ -121,6 +220,7 @@ const JoinEventPage: React.FC = () => {
             variant="contained"
             style={{ backgroundColor: "black", color: "white" }}
             endIcon={<AddToPhotosIcon />}
+            onClick={(e) => setShowFilterModal(true)}
           >
             Filter
           </Button>
