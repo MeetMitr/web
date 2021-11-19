@@ -1,16 +1,10 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Box } from "@mui/material";
-import Navbar from "./components/Navbar";
+import JoinEventPage from "./pages/JoinEventPage";
 
 function App() {
-  return (
-    <Box>
-      <Navbar />
-      Test
-    </Box>
-  );
+  return <JoinEventPage />;
 }
 
 export default App;

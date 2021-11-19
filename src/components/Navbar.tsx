@@ -2,7 +2,7 @@ import { AppBar, Toolbar } from "@mui/material";
 
 function Navbar() {
   return (
-    <AppBar>
+    <AppBar style={{ backgroundColor: "red" }}>
       <Toolbar>e</Toolbar>
     </AppBar>
   );
