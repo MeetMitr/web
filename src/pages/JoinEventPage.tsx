@@ -16,6 +16,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { styled } from "@mui/material/styles";
 import { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
+import { TimePicker } from "@mui/lab";
 
 const MySearch = styled(TextField)`
   background-color: white;
@@ -57,6 +58,7 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
     p: 4,
   };
   const [value, setValue] = useState<DateRange<Date>>([null, null]);
+  const [valueTime, setValueTime] = useState<Date | null>(new Date());
   return (
     <Modal open={props.open}>
       <Box sx={style}>
@@ -77,6 +79,20 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
                   <TextField {...endProps} />
                 </Fragment>
               )}
+            />
+          </LocalizationProvider>
+        </Box>
+        <hr />
+        <Box>เวลา</Box>
+        <Box marginY={2}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              label="Start Time"
+              value={valueTime}
+              onChange={(newValue) => {
+                setValueTime(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
         </Box>
