@@ -1,7 +1,9 @@
-import { Box, Avatar, Button } from "@mui/material";
+import { Box, Avatar, Button, ButtonGroup, Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import AddIcon from "@mui/icons-material/Add";
+import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { useState } from "react";
 
 interface EventPageProps {
@@ -20,10 +22,12 @@ const Divider: React.FC = () => {
 };
 
 const EventPage: React.FC<EventPageProps> = (props) => {
-  const [imageIdx, setImageIdx] = useState<number>(0);
+  const [imageIdx, setImageIdx] = useState<number>(1);
+  const [tag, setTag] = useState<string>("About");
 
   const backgroundImages = [
     "https://jandevents.com/wp-content/uploads/jand-party.jpg",
+    "https://dlq00ggnjruqn.cloudfront.net/prometheus/getImage?id=268041",
   ];
 
   return (
@@ -31,16 +35,36 @@ const EventPage: React.FC<EventPageProps> = (props) => {
       <Navbar title={"Event Feed"} />
       <Box display="flex">
         <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
           width="50%"
           minHeight="100vh"
           style={{
-            backgroundImage: `url(${"https://jandevents.com/wp-content/uploads/jand-party.jpg"})`,
+            backgroundImage: `url(${backgroundImages[imageIdx]})`,
             //backgroundImage: `url(${process.env.PUBLIC_URL + '/image.png'})` ,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             backgroundRepeat: "no-repeat",
           }}
-        />
+        >
+          <Box width="98%" display="flex" justifyContent="space-between">
+            <Button
+              onClick={() => setImageIdx(Math.max(imageIdx - 1, 0))}
+              style={{ backgroundColor: "black", color: "white" }}
+            >
+              <ArrowLeftIcon />
+            </Button>
+            <Button
+              onClick={() =>
+                setImageIdx(Math.min(imageIdx + 1, backgroundImages.length - 1))
+              }
+              style={{ backgroundColor: "black", color: "white" }}
+            >
+              <ArrowRightIcon />
+            </Button>
+          </Box>
+        </Box>
         <Box
           display="flex"
           flexDirection="column"
@@ -105,13 +129,71 @@ const EventPage: React.FC<EventPageProps> = (props) => {
           </Box>
           <Box marginTop="20px">Attendances : </Box>
           <Box
-            width="100%"
-            height="500px"
             marginTop="10px"
-            style={{
-              background: "linear-gradient(90,#FFD468 0%,#FFC229 100%)",
-            }}
-          ></Box>
+            borderRadius="10px"
+            style={{ backgroundColor: "lightgray" }}
+          >
+            <Box
+              width={`${(45 / 60) * 100}%`}
+              height="30px"
+              display="flex"
+              justifyContent="right"
+              padding="1%"
+              color="white"
+              alignItems="center"
+              borderRadius="10px"
+              style={{
+                background: "linear-gradient(to right,#e66465, #9198e5)",
+              }}
+            >
+              {45}/{60}
+            </Box>
+          </Box>
+          <Box marginTop="5%">
+            <ButtonGroup variant="text" aria-label="text button group">
+              <Button
+                style={{
+                  borderColor: "gray",
+                  color: tag === "About" ? "black" : "gray",
+                }}
+                onClick={() => setTag("About")}
+              >
+                About
+              </Button>
+              <Button
+                style={{
+                  borderColor: "gray",
+                  color: tag === "Location" ? "black" : "gray",
+                }}
+                onClick={() => setTag("Location")}
+              >
+                Location
+              </Button>
+              <Button
+                style={{
+                  borderColor: "gray",
+                  color: tag === "Attendances" ? "black" : "gray",
+                }}
+                onClick={() => setTag("Attendances")}
+              >
+                Attendances
+              </Button>
+              <Button
+                style={{
+                  borderColor: "gray",
+                  color: tag === "DateTime" ? "black" : "gray",
+                }}
+                onClick={() => setTag("DateTime")}
+              >
+                Date & Time
+              </Button>
+            </ButtonGroup>
+          </Box>
+          <Divider />
+          {tag === "About" && "About"}
+          {tag === "Location" && "Location"}
+          {tag === "Attendances" && "Attendances"}
+          {tag === "DateTime" && "DateTime"}
         </Box>
       </Box>
     </Box>
