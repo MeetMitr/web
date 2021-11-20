@@ -10,7 +10,6 @@ import {
 import DateRangePicker, { DateRange } from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import Logo from "../resources/logo.svg";
 import Navbar from "../components/Navbar";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
