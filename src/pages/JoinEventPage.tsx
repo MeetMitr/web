@@ -11,10 +11,12 @@ import DateRangePicker, { DateRange } from "@mui/lab/DateRangePicker";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import Logo from "../resources/logo.svg";
+import Navbar from "../components/Navbar";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { styled } from "@mui/material/styles";
 import { useState, Fragment } from "react";
+import { Link } from "react-router-dom";
 
 const MySearch = styled(TextField)`
   background-color: white;
@@ -118,44 +120,49 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
 };
 
 const EventPaper: React.FC<EventPaperProps> = (props) => {
-  console.log(props);
   let defaultUrl =
     "https://seda.college/blog/wp-content/uploads/2018/06/party.jpg";
   return (
-    <Card style={{ height: "300px" }}>
-      <Box height="70%">
-        <img src={props.imageUrl || defaultUrl} alt="1" height="100%" />
-      </Box>
-      <Box
-        display="flex"
-        height="10%"
-        justifyContent="center"
-        alignItems="center"
-        fontWeight="bold"
-        style={{ backgroundColor: "black", color: "white" }}
-      >
-        {props.name}
-      </Box>
-      <Box
-        display="flex"
-        height="8%"
-        justifyContent="center"
-        alignItems="center"
-        style={{ color: "#C72200" }}
-        fontSize={10}
-      >
-        {props.time.slice(0, 25)}
-      </Box>
-      <Box
-        display="flex"
-        height="10%"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <LocationOnIcon />
-        {props.location}
-      </Box>
-    </Card>
+    <Link to="/event/a">
+      <Card style={{ height: "300px", cursor: "pointer" }}>
+        <Box height="70%">
+          <img
+            src={props.imageUrl || defaultUrl}
+            alt={props.imageUrl || defaultUrl}
+            height="100%"
+          />
+        </Box>
+        <Box
+          display="flex"
+          height="10%"
+          justifyContent="center"
+          alignItems="center"
+          fontWeight="bold"
+          style={{ backgroundColor: "black", color: "white" }}
+        >
+          {props.name}
+        </Box>
+        <Box
+          display="flex"
+          height="8%"
+          justifyContent="center"
+          alignItems="center"
+          style={{ color: "#C72200" }}
+          fontSize={10}
+        >
+          {props.time.slice(0, 25)}
+        </Box>
+        <Box
+          display="flex"
+          height="10%"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <LocationOnIcon />
+          {props.location}
+        </Box>
+      </Card>
+    </Link>
   );
 };
 
@@ -179,7 +186,8 @@ const JoinEventPage: React.FC = () => {
         open={showFilterModal}
         setShowFilterModal={setShowFilterModal}
       />
-      <Box
+      <Navbar title="Event Feed" home />
+      {/* <Box
         display="flex"
         paddingY="10px"
         justifyContent="center"
@@ -201,7 +209,7 @@ const JoinEventPage: React.FC = () => {
             <AddToPhotosIcon fontSize="large" />
           </Box>
         </Box>
-      </Box>
+      </Box> */}
       <Box display="flex" justifyContent="center">
         <Box
           display="flex"
