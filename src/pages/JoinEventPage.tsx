@@ -57,8 +57,10 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
     boxShadow: 24,
     p: 4,
   };
-  const [value, setValue] = useState<DateRange<Date>>([null, null]);
-  const [valueTime, setValueTime] = useState<Date | null>(new Date());
+  const [dateRange, setDateRange] = useState<DateRange<Date>>([null, null]);
+  const [startTime, setStartTime] = useState<Date | null>(new Date());
+  const [stopTime, setStopTime] = useState<Date | null>(new Date());
+
   return (
     <Modal open={props.open}>
       <Box sx={style}>
@@ -68,9 +70,9 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
             <DateRangePicker
               startText="Check-in"
               endText="Check-out"
-              value={value}
+              value={dateRange}
               onChange={(newValue) => {
-                setValue(newValue);
+                setDateRange(newValue);
               }}
               renderInput={(startProps, endProps) => (
                 <Fragment>
@@ -84,17 +86,38 @@ const FilterModal: React.FC<FilterModalProps> = (props) => {
         </Box>
         <hr />
         <Box>เวลา</Box>
-        <Box marginY={2}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <TimePicker
-              label="Start Time"
-              value={valueTime}
-              onChange={(newValue) => {
-                setValueTime(newValue);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+        <Box display="flex" width="100%">
+          <Box marginY={2}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TimePicker
+                label="Start Time"
+                value={startTime}
+                onChange={(newValue) => {
+                  setStartTime(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField style={{ width: "100%" }} {...params} />
+                )}
+              />
+            </LocalizationProvider>
+          </Box>
+          <Box display="flex" alignItems="center" mx={2}>
+            to
+          </Box>
+          <Box marginY={2}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TimePicker
+                label="Stop Time"
+                value={stopTime}
+                onChange={(newValue) => {
+                  setStopTime(newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField style={{ width: "100%" }} {...params} />
+                )}
+              />
+            </LocalizationProvider>
+          </Box>
         </Box>
         <hr />
         <Box>ระยะทาง</Box>

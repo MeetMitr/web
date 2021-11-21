@@ -47,16 +47,18 @@ const LoginPage = () => {
                 style={{ width: "80%", marginTop: "15px" }}
               />
               <Box marginY="15px">
-                <Button
-                  size="large"
-                  variant="contained"
-                  onClick={loginHandler}
-                  style={{ backgroundColor: "#303B5B", width: "80%" }}
-                >
-                  <Box marginX="30px" fontWeight="bold">
-                    Login
-                  </Box>
-                </Button>
+                <Link to="/event">
+                  <Button
+                    size="large"
+                    variant="contained"
+                    onClick={loginHandler}
+                    style={{ backgroundColor: "#303B5B", width: "80%" }}
+                  >
+                    <Box marginX="30px" fontWeight="bold">
+                      Login
+                    </Box>
+                  </Button>
+                </Link>
               </Box>
               <Box
                 marginLeft="10%"

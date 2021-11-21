@@ -9,10 +9,10 @@ import { Routes, Route } from "react-router-dom";
 function App() {
   return (
     <Routes>
-      <Route index element={<JoinEventPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route index element={<LoginPage />} />
+      <Route path="/event" element={<JoinEventPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/event/a" element={<EventPage name="a" />} />
+      <Route path="/event/:id" element={<EventPage name="a" />} />
     </Routes>
   );
 }

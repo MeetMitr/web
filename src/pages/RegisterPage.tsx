@@ -7,7 +7,12 @@ import DatePicker from "@mui/lab/DatePicker";
 
 const RegisterPage = () => {
   const [gender, setGender] = useState("");
-  const [value, setValue] = useState<Date | null>(null);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [birthdate, setBirthdate] = useState(null);
   return (
     <Box
       display="flex"
@@ -96,9 +101,9 @@ const RegisterPage = () => {
               <Box marginTop="3px">
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    value={value}
+                    value={birthdate}
                     onChange={(newValue) => {
-                      setValue(newValue);
+                      setBirthdate(newValue);
                     }}
                     renderInput={(params) => (
                       <TextField
