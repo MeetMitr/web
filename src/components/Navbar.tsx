@@ -2,6 +2,8 @@ import { AppBar, Toolbar, Box, Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../resources/logo.svg";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
+import { useUserInfo } from "../context/UserInfoProvider";
+import { useEffect } from "react";
 
 interface NavbarProps {
   title: string;

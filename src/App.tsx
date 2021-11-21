@@ -5,15 +5,18 @@ import EventPage from "./pages/EventPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import { Routes, Route } from "react-router-dom";
+import { UserInfoProvider } from "./context/UserInfoProvider";
 
 function App() {
   return (
-    <Routes>
-      <Route index element={<LoginPage />} />
-      <Route path="/event" element={<JoinEventPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/event/:id" element={<EventPage name="a" />} />
-    </Routes>
+    <UserInfoProvider>
+      <Routes>
+        <Route index element={<LoginPage />} />
+        <Route path="/event" element={<JoinEventPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/event/:id" element={<EventPage name="a" />} />
+      </Routes>
+    </UserInfoProvider>
   );
 }
 
