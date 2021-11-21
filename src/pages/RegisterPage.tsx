@@ -4,6 +4,7 @@ import { useState } from "react";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
+import { Link } from "react-router-dom";
 
 const RegisterPage = () => {
   const [gender, setGender] = useState("");
@@ -138,14 +139,15 @@ const RegisterPage = () => {
               </Box>
             </Box>
           </Box>
-
           <Box marginTop="20px" width="100%">
-            <Button
-              variant="contained"
-              style={{ width: "100%", backgroundColor: "#FFC229" }}
-            >
-              Register
-            </Button>
+            <Link to="/">
+              <Button
+                variant="contained"
+                style={{ width: "100%", backgroundColor: "#FFC229" }}
+              >
+                Register
+              </Button>
+            </Link>
           </Box>
         </Box>
       </Paper>

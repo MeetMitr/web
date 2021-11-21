@@ -1,6 +1,7 @@
 import { Box, Paper, TextField, Button } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import LogoYellow from "../resources/logoYellow.svg";
 
 const LoginPage = () => {
   const [emailAddress, setEmailAddress] = useState("");
@@ -19,6 +20,7 @@ const LoginPage = () => {
     >
       <Box alignItems="center" display="flex" width="50%">
         <Box width="100%" textAlign="center" paddingX="10%">
+          <img width="100px" src={LogoYellow} alt="logo" />
           <h1>MeetMitr</h1>
           <hr />
           <h4>
