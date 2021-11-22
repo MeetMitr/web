@@ -5,6 +5,7 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const RegisterPage = () => {
   const [gender, setGender] = useState("");
@@ -14,6 +15,32 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [birthdate, setBirthdate] = useState(null);
+
+  const registerHandler = () => {
+    console.log(birthdate.getDate());
+    var x = `${birthdate.getFullYear()}-${
+      birthdate.getMonth() < 10
+        ? `0${birthdate.getMonth()}`
+        : `${birthdate.getMonth()}`
+    }-${
+      birthdate.getDate() < 10
+        ? `0${birthdate.getDate()}`
+        : `${birthdate.getDate()}`
+    }`;
+    var data = {
+      firstName: name,
+      lastName: surname,
+      email: emailAddress,
+      password: password,
+      gender: gender,
+      birthdate: x,
+    };
+    console.log(data);
+    axios
+      .post("http://35.213.155.144:4000/register", data)
+      .then((res) => console.log(res));
+  };
+
   return (
     <Box
       display="flex"
@@ -40,7 +67,11 @@ const RegisterPage = () => {
                 First Name
               </Box>
               <Box marginTop="3px">
-                <TextField sx={{ width: "95%" }} size="small" />
+                <TextField
+                  onChange={(e) => setName(e.target.value)}
+                  sx={{ width: "95%" }}
+                  size="small"
+                />
               </Box>
             </Box>
             <Box width="50%">
@@ -50,7 +81,11 @@ const RegisterPage = () => {
                 Last Name
               </Box>
               <Box marginTop="3px">
-                <TextField sx={{ width: "100%" }} size="small" />
+                <TextField
+                  onChange={(e) => setSurname(e.target.value)}
+                  sx={{ width: "100%" }}
+                  size="small"
+                />
               </Box>
             </Box>
           </Box>
@@ -62,7 +97,12 @@ const RegisterPage = () => {
                 Password
               </Box>
               <Box marginTop="3px">
-                <TextField type="password" sx={{ width: "95%" }} size="small" />
+                <TextField
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  sx={{ width: "95%" }}
+                  size="small"
+                />
               </Box>
             </Box>
             <Box width="50%">
@@ -73,6 +113,7 @@ const RegisterPage = () => {
               </Box>
               <Box marginTop="3px">
                 <TextField
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   type="password"
                   sx={{ width: "100%" }}
                   size="small"
@@ -88,7 +129,11 @@ const RegisterPage = () => {
                 Email Address
               </Box>
               <Box marginTop="3px">
-                <TextField sx={{ width: "100%" }} size="small" />
+                <TextField
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  sx={{ width: "100%" }}
+                  size="small"
+                />
               </Box>
             </Box>
           </Box>
@@ -142,6 +187,7 @@ const RegisterPage = () => {
           <Box marginTop="20px" width="100%">
             <Link to="/">
               <Button
+                onClick={registerHandler}
                 variant="contained"
                 style={{ width: "100%", backgroundColor: "#FFC229" }}
               >

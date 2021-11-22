@@ -13,7 +13,9 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 interface UserProfileModalProps {
   open: boolean;
@@ -139,19 +141,25 @@ const EventPage: React.FC<EventPageProps> = (props) => {
   const [imageIdx, setImageIdx] = useState<number>(1);
   const [tag, setTag] = useState<string>("About");
   const [joined, setJoined] = useState<boolean>(false);
+  const [event, setEvent] = useState<any>({});
+
+  const id = useParams().id;
+
+  useEffect(() => {
+    axios.get("http://35.213.155.144:4000/eventInfo/" + id).then((res) => {
+      let x = res.data[0];
+
+      setEvent(x);
+    });
+  });
 
   const joinHandler = () => {
     setJoined(!joined);
   };
 
-  const backgroundImages = [
-    "https://jandevents.com/wp-content/uploads/jand-party.jpg",
-    "https://dlq00ggnjruqn.cloudfront.net/prometheus/getImage?id=268041",
-  ];
-
   return (
     <Box minHeight="100vh" style={{ backgroundColor: "#FAF3E7" }}>
-      <Navbar title={"วิ่งแบบพี่ตูน"} />
+      <Navbar title={event.name} />
       <Box display="flex">
         <Box
           display="flex"
@@ -160,7 +168,7 @@ const EventPage: React.FC<EventPageProps> = (props) => {
           width="50%"
           minHeight="100vh"
           style={{
-            backgroundImage: `url(${backgroundImages[imageIdx]})`,
+            backgroundImage: `url(${event.imageURL})`,
             //backgroundImage: `url(${process.env.PUBLIC_URL + '/image.png'})` ,
             backgroundSize: "cover",
             backgroundPosition: "center center",
@@ -175,9 +183,7 @@ const EventPage: React.FC<EventPageProps> = (props) => {
               <ArrowLeftIcon />
             </Button>
             <Button
-              onClick={() =>
-                setImageIdx(Math.min(imageIdx + 1, backgroundImages.length - 1))
-              }
+              onClick={() => setImageIdx(Math.min(imageIdx + 1, 0))}
               style={{ backgroundColor: "black", color: "white" }}
             >
               <ArrowRightIcon />
@@ -274,7 +280,9 @@ const EventPage: React.FC<EventPageProps> = (props) => {
             style={{ backgroundColor: "lightgray" }}
           >
             <Box
-              width={`${(45 / 60) * 100}%`}
+              width={`${
+                ((2 + (joined ? 1 : 0)) / event.maxParticipant) * 100
+              }%`}
               height="30px"
               display="flex"
               justifyContent="right"
@@ -285,9 +293,7 @@ const EventPage: React.FC<EventPageProps> = (props) => {
               style={{
                 background: "linear-gradient(to right,#e66465, #9198e5)",
               }}
-            >
-              {45}/{60}
-            </Box>
+            ></Box>
           </Box>
           <Box marginTop="5%">
             <ButtonGroup variant="text" aria-label="text button group">
@@ -330,15 +336,16 @@ const EventPage: React.FC<EventPageProps> = (props) => {
             </ButtonGroup>
           </Box>
           <Divider />
-          {tag === "About" && "About"}
-          {tag === "Location" && "Location"}
+          {tag === "About" && event.description}
+          {tag === "Location" &&
+            `${event.province} ${event.district} ${event.zipcode}`}
           {tag === "Attendances" && (
             <>
               <UserPaper name="A" />
               <UserPaper name="B" />
             </>
           )}
-          {tag === "DateTime" && "DateTime"}
+          {tag === "DateTime" && event.takePlace}
         </Box>
       </Box>
     </Box>

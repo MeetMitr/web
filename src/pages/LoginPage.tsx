@@ -1,15 +1,27 @@
 import { Box, Paper, TextField, Button } from "@mui/material";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import LogoYellow from "../resources/logoYellow.svg";
+import axios from "axios";
+
+import { useUserInfo } from "../context/UserInfoProvider";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-
+  const { state, setState } = useUserInfo();
   const loginHandler = () => {
-    console.log(emailAddress);
-    console.log(password);
+    axios
+      .post("http://35.213.155.144:4000/", {
+        email: emailAddress,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res);
+        setState(res.data);
+      });
+    navigate("/event");
   };
 
   return (
@@ -35,7 +47,7 @@ const LoginPage = () => {
           <Paper>
             <Box paddingY="1%">
               <Box fontSize={40} fontWeight="bold">
-                เข้าสู่ระบบ
+                {"เข้าสู่ระบบ"}
               </Box>
               <TextField
                 label="Email Address"
@@ -49,18 +61,16 @@ const LoginPage = () => {
                 style={{ width: "80%", marginTop: "15px" }}
               />
               <Box marginY="15px">
-                <Link to="/event">
-                  <Button
-                    size="large"
-                    variant="contained"
-                    onClick={loginHandler}
-                    style={{ backgroundColor: "#303B5B", width: "80%" }}
-                  >
-                    <Box marginX="30px" fontWeight="bold">
-                      Login
-                    </Box>
-                  </Button>
-                </Link>
+                <Button
+                  size="large"
+                  variant="contained"
+                  onClick={loginHandler}
+                  style={{ backgroundColor: "#303B5B", width: "80%" }}
+                >
+                  <Box marginX="30px" fontWeight="bold">
+                    Login
+                  </Box>
+                </Button>
               </Box>
               <Box
                 marginLeft="10%"

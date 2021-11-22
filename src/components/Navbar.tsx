@@ -1,16 +1,28 @@
-import { AppBar, Toolbar, Box, Avatar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, Box, Menu, MenuItem } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../resources/logo.svg";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import { useUserInfo } from "../context/UserInfoProvider";
-import { useEffect } from "react";
-
+import { useState } from "react";
+import axios from "axios";
 interface NavbarProps {
   title: string;
   home?: boolean;
 }
 
 const Navbar: React.FC<NavbarProps> = (props) => {
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const { state } = useUserInfo();
+  const deleteAccountHandler = () => {
+    console.log(state.userId);
+    axios.post("http://35.213.155.144:4000/deleteAccount", {
+      userId: state.userId,
+    });
+    setShowMenu(false);
+    navigate("/");
+  };
   return (
     <AppBar
       position="sticky"
@@ -18,7 +30,7 @@ const Navbar: React.FC<NavbarProps> = (props) => {
     >
       <Toolbar>
         <Box display="flex" justifyContent="space-between" width="100%">
-          <Link to="/">
+          <Link to="/event">
             <img src={logo} alt="logo" height="40px" />
           </Link>
           <Box
@@ -30,19 +42,34 @@ const Navbar: React.FC<NavbarProps> = (props) => {
           >
             {props.title}
           </Box>
-          {props.home ? (
+          <Box
+            display="flex"
+            alignItems="center"
+            color="black"
+            fontSize="30px"
+            fontWeight="bold"
+          >
             <Box
-              display="flex"
-              alignItems="center"
-              color="black"
-              fontSize="30px"
-              fontWeight="bold"
+              onClick={(e) => {
+                setAnchorEl(e.currentTarget);
+                setShowMenu(true);
+              }}
+            >{`${state.firstName}`}</Box>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={showMenu}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
             >
-              <AddToPhotosIcon />
-            </Box>
-          ) : (
-            <Avatar />
-          )}
+              <MenuItem onClick={() => setShowMenu(false)}>Coin : 300</MenuItem>
+              <MenuItem onClick={deleteAccountHandler}>Delete Account</MenuItem>
+              <Link to="/">
+                <MenuItem>Log Out</MenuItem>
+              </Link>
+            </Menu>
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
