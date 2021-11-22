@@ -50,6 +50,8 @@ const TablePage = () => {
       justifyContent="center"
       alignItems="center"
       display="flex"
+      paddingY={"5%"}
+      style={{ backgroundColor: "#FAF3E7" }}
       minHeight="100vh"
     >
       <Box width="80%">
