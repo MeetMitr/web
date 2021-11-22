@@ -137,7 +137,7 @@ const Divider: React.FC = () => {
 };
 
 interface UserPaperProps {
-  id?: string;
+  id: string;
   name: string;
 }
 
@@ -400,7 +400,10 @@ const EventPage: React.FC<EventPageProps> = (props) => {
           {tag === "Attendances" &&
             joinedUser.map((e) => {
               return (
-                <UserPaper name={e.firstName + " " + e.lastName} id={e.id} />
+                <UserPaper
+                  name={e.firstName + " " + e.lastName}
+                  id={e.userId}
+                />
               );
             })}
           {tag === "DateTime" && event.takePlace}
