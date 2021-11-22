@@ -22,6 +22,7 @@ interface UserProfileModalProps {
   open: boolean;
   setOpen: any;
   id?: string;
+  name?: string;
 }
 
 const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
@@ -46,7 +47,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
       .post("http://35.213.155.144:4000/report", {
         userId: state.userId,
         reason: reason,
-        reportedUserId: "a36ed45f-a685-4744-9bad-8900fe6db53e",
+        reportedUserId: props.id,
       })
       .then((res) => {
         console.log(res);
@@ -73,10 +74,10 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
           <Avatar sx={{ width: "100px", height: "100px" }}>J</Avatar>
         </Box>
         <Box marginTop="5%" display="flex" justifyContent="center">
-          John Wick
+          {props.name}
         </Box>
         <Box marginTop="5%" color="gray" display="flex" justifyContent="center">
-          a36ed45f-a685-4744-9bad-8900fe6db53e
+          {props.id}
         </Box>
 
         <Box marginTop="5%" display="flex" justifyContent="center">
@@ -139,7 +140,12 @@ const UserPaper: React.FC<UserPaperProps> = (props) => {
 
   return (
     <>
-      <UserProfileModal open={showModal} setOpen={setShowModal} />
+      <UserProfileModal
+        name={props.name}
+        id={props.id}
+        open={showModal}
+        setOpen={setShowModal}
+      />
       <Paper
         onClick={() => setShowModal(true)}
         style={{
@@ -165,6 +171,7 @@ const UserPaper: React.FC<UserPaperProps> = (props) => {
 const EventPage: React.FC<EventPageProps> = (props) => {
   const [imageIdx, setImageIdx] = useState<number>(1);
   const [tag, setTag] = useState<string>("About");
+  const [joinedUser, setJoinedUser] = useState([]);
   const [joined, setJoined] = useState<boolean>(false);
   const [event, setEvent] = useState<any>({});
   const { state } = useUserInfo();
@@ -175,7 +182,22 @@ const EventPage: React.FC<EventPageProps> = (props) => {
       let x = res.data[0];
       setEvent(x);
     });
-  });
+    console.log(id);
+    axios
+      .post("http://35.213.155.144:4000/query", {
+        sql: `SELECT * FROM UserJoinEvent NATURAL JOIN User WHERE eventId="${id}" AND status > 0 ;`,
+      })
+      .then((res) => {
+        console.log(res);
+        setJoinedUser(res.data);
+        for (let i = 0; i < res.data.length; i++) {
+          console.log(res.data[i].userId, state.userId);
+          if (res.data[i].userId === state.userId) {
+            setJoined(true);
+          }
+        }
+      });
+  }, []);
 
   const joinHandler = () => {
     setJoined(!joined);
@@ -368,17 +390,13 @@ const EventPage: React.FC<EventPageProps> = (props) => {
           <Divider />
           {tag === "About" && event.description}
           {tag === "Location" &&
-            `${event.province} ${event.district} ${event.zipcode}`}
-          {tag === "Attendances" && (
-            <>
-              <UserPaper name="John Wick" />
-              {joined ? (
-                <UserPaper name={state.firstName + " " + state.lastName} />
-              ) : (
-                <></>
-              )}
-            </>
-          )}
+            `${event.address} ${event.province} ${event.district} ${event.zipcode}`}
+          {tag === "Attendances" &&
+            joinedUser.map((e) => {
+              return (
+                <UserPaper name={e.firstName + " " + e.lastName} id={e.id} />
+              );
+            })}
           {tag === "DateTime" && event.takePlace}
         </Box>
       </Box>
