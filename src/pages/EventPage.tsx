@@ -57,6 +57,12 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
 
   const addFriendHandler = () => {
     setAdded(true);
+    axios
+      .post("http://35.213.155.144:4000/addFriend", {
+        userId: state.userId,
+        friendId: props.id,
+      })
+      .then((res) => console.log(res));
   };
 
   return (
