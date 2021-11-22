@@ -31,7 +31,8 @@ const TablePage = () => {
         sql: "SELECT * FROM Event ;",
       })
       .then((res) => {
-        setData(res);
+        setData(res.data);
+        console.log(res.data);
       });
   }, []);
 
@@ -40,6 +41,7 @@ const TablePage = () => {
       .post("http://35.213.155.144:4000/query", { sql: query })
       .then((res) => {
         console.log(res);
+        setData(res.data);
       });
   };
 
@@ -56,6 +58,7 @@ const TablePage = () => {
           style={{ width: "100%", marginBottom: "20px" }}
         />
         <Button
+          onClick={searchHandler}
           variant="contained"
           style={{ width: "100%", marginBottom: "20px" }}
         >
@@ -65,29 +68,23 @@ const TablePage = () => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                {console.log(data)}
-                <TableCell>Dessert (100g serving)</TableCell>
-                <TableCell align="right">Calories</TableCell>
-                <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                {Object.keys(data[0]).map((e) => {
+                  console.log(e);
+                  return <TableCell>{e}</TableCell>;
+                })}
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
-                </TableRow>
-              ))}
+              {Object.keys(data).map((e) => {
+                return (
+                  <TableRow>
+                    {Object.keys(data[e]).map((x) => {
+                      console.log(data[e], x);
+                      return <TableCell>{data[e][x]}</TableCell>;
+                    })}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
