@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import React, { createContext, useState, useContext } from "react";
 
 const UserInfoContext = createContext({
   state: {} as any,

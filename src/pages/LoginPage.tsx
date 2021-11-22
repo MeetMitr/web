@@ -1,6 +1,6 @@
 import { Box, Paper, TextField, Button } from "@mui/material";
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LogoYellow from "../resources/logoYellow.svg";
 import axios from "axios";
 
@@ -10,18 +10,23 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const { state, setState } = useUserInfo();
+  const { setState } = useUserInfo();
   const loginHandler = () => {
+    console.log(emailAddress);
+    console.log(password);
     axios
       .post("http://35.213.155.144:4000/", {
         email: emailAddress,
         password: password,
       })
-      .then((res) => {
-        console.log(res);
-        setState(res.data);
+      .then((res: any) => {
+        if (res.data !== "login fail") {
+          console.log(res);
+          console.log(res.data.userId);
+          setState(res.data);
+          navigate("/event");
+        }
       });
-    navigate("/event");
   };
 
   return (

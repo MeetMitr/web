@@ -16,6 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useUserInfo } from "../context/UserInfoProvider";
 
 interface UserProfileModalProps {
   open: boolean;
@@ -24,6 +25,7 @@ interface UserProfileModalProps {
 }
 
 const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
+  const { state } = useUserInfo();
   const style = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -37,6 +39,20 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
   };
 
   const [added, setAdded] = useState<boolean>(false);
+  const [reason, setReason] = useState<string>("");
+
+  const reportHandler = () => {
+    axios
+      .post("http://35.213.155.144:4000/report", {
+        userId: state.userId,
+        reason: reason,
+        reportedUserId: "a36ed45f-a685-4744-9bad-8900fe6db53e",
+      })
+      .then((res) => {
+        console.log(res);
+        props.setOpen(false);
+      });
+  };
 
   const addFriendHandler = () => {
     setAdded(true);
@@ -54,11 +70,15 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
           <CloseIcon />
         </Box>
         <Box display="flex" justifyContent="center">
-          <Avatar sx={{ width: "100px", height: "100px" }}>H</Avatar>
+          <Avatar sx={{ width: "100px", height: "100px" }}>J</Avatar>
         </Box>
         <Box marginTop="5%" display="flex" justifyContent="center">
           John Wick
         </Box>
+        <Box marginTop="5%" color="gray" display="flex" justifyContent="center">
+          a36ed45f-a685-4744-9bad-8900fe6db53e
+        </Box>
+
         <Box marginTop="5%" display="flex" justifyContent="center">
           <Button
             color="success"
@@ -78,9 +98,14 @@ const UserProfileModal: React.FC<UserProfileModalProps> = (props) => {
         >
           Report
         </Box>
-        <TextField label="Reason" color="error" style={{ width: "100%" }} />
+        <TextField
+          onChange={(e) => setReason(e.target.value)}
+          label="Reason"
+          color="error"
+          style={{ width: "100%" }}
+        />
         <Box marginTop="15px" display="flex" justifyContent="right">
-          <Button color="error" variant="contained">
+          <Button onClick={reportHandler} color="error" variant="contained">
             Send Report
           </Button>
         </Box>
@@ -142,19 +167,24 @@ const EventPage: React.FC<EventPageProps> = (props) => {
   const [tag, setTag] = useState<string>("About");
   const [joined, setJoined] = useState<boolean>(false);
   const [event, setEvent] = useState<any>({});
-
+  const { state } = useUserInfo();
   const id = useParams().id;
 
   useEffect(() => {
     axios.get("http://35.213.155.144:4000/eventInfo/" + id).then((res) => {
       let x = res.data[0];
-
       setEvent(x);
     });
   });
 
   const joinHandler = () => {
     setJoined(!joined);
+    axios
+      .post("http://35.213.155.144:4000/eventInfo/", {
+        userId: state.userId,
+        eventId: id,
+      })
+      .then((res) => console.log(res));
   };
 
   return (
@@ -341,8 +371,12 @@ const EventPage: React.FC<EventPageProps> = (props) => {
             `${event.province} ${event.district} ${event.zipcode}`}
           {tag === "Attendances" && (
             <>
-              <UserPaper name="A" />
-              <UserPaper name="B" />
+              <UserPaper name="John Wick" />
+              {joined ? (
+                <UserPaper name={state.firstName + " " + state.lastName} />
+              ) : (
+                <></>
+              )}
             </>
           )}
           {tag === "DateTime" && event.takePlace}

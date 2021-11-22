@@ -1,7 +1,6 @@
 import { AppBar, Toolbar, Box, Menu, MenuItem } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../resources/logo.svg";
-import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import { useUserInfo } from "../context/UserInfoProvider";
 import { useState } from "react";
 import axios from "axios";
@@ -17,9 +16,12 @@ const Navbar: React.FC<NavbarProps> = (props) => {
   const { state } = useUserInfo();
   const deleteAccountHandler = () => {
     console.log(state.userId);
-    axios.post("http://35.213.155.144:4000/deleteAccount", {
-      userId: state.userId,
-    });
+    console.log(state.email);
+    axios
+      .post("http://35.213.155.144:4000/deleteAccount", {
+        userId: state.userId,
+      })
+      .then((res) => console.log(res));
     setShowMenu(false);
     navigate("/");
   };
